@@ -1,19 +1,19 @@
-FROM ubuntu:14.04
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
 ARG WINE_VERSION=winehq-devel
-ARG PYTHON_VERSION=2.7.12
+ARG PYTHON_VERSION=2.7.17
+# PyInstaller 3.6 is last version to support python2
 ARG PYINSTALLER_VERSION=3.6
 
 # we need wine for this all to work, so we'll use the PPA
 RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy software-properties-common \
     && add-apt-repository ppa:wine/wine-builds \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy $WINE_VERSION winetricks wget \
+    && apt-get install --no-install-recommends -qfy $WINE_VERSION winetricks \
     && apt-get clean
 
 # wine settings
