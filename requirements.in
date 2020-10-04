@@ -1,0 +1,8 @@
+# dev
+black
+bpython
+flake8
+pip-tools
+powerline-status
+pre-commit
+commitizen
