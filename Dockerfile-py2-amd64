@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 SHELL ["/bin/bash", "-i", "-c"]
 
-ARG PYTHON_VERSION=2.7.17
+ARG PYTHON_VERSION=2.7.18
 # PyInstaller 3.6 is last version to support python2
 ARG PYINSTALLER_VERSION=3.6
 
@@ -20,6 +20,7 @@ RUN \
         build-essential \
         ca-certificates \
         curl \
+        wget \
         git \
         libbz2-dev \
         libreadline-dev \
@@ -29,7 +30,6 @@ RUN \
         libffi-dev \
         #optional libraries
         libgdbm-dev \
-        libgdbm3 \
         uuid-dev \
         #upx
         upx \
