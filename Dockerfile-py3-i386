@@ -19,6 +19,7 @@ RUN \
         build-essential \
         ca-certificates \
         curl \
+        wget \
         git \
         libbz2-dev \
         libreadline-dev \
@@ -28,7 +29,6 @@ RUN \
         libffi-dev \
         #optional libraries
         libgdbm-dev \
-        libgdbm3 \
         uuid-dev \
         #upx
         upx \
