@@ -29,7 +29,6 @@ RUN \
         libffi-dev \
         #optional libraries
         libgdbm-dev \
-        libgdbm3 \
         uuid-dev \
         #upx
         upx \
