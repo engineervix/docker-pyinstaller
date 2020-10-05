@@ -34,8 +34,9 @@ ENV PYPI_INDEX_URL=https://pypi.python.org/simple
 # install python in wine, using the msi packages to install, extracting
 # the files directly, since installing isn't running correctly.
 RUN set -x \
-    && winetricks win10 \
-    && for msifile in `echo core dev exe lib path pip tcltk tools`; do \
+    && winetricks win10
+RUN set -x \
+    && for msifile in `echo core dev exe lib path pip tcltk tools ucrt`; do \
         wget -nv "https://www.python.org/ftp/python/$PYTHON_VERSION/win32/${msifile}.msi"; \
         wine msiexec /i "${msifile}.msi" /qb TARGETDIR=C:/Python37; \
         rm ${msifile}.msi; \
@@ -58,11 +59,11 @@ ENV W_WINDIR_UNIX="$W_DRIVE_C/windows"
 ENV W_SYSTEM_DLLS="$W_WINDIR_UNIX/system32"
 ENV W_TMP="$W_DRIVE_C/windows/temp/_$0"
 
-# install Microsoft Visual C++ Redistributable for Visual Studio 2017 dll files
+# install Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019 dll files
 RUN set -x \
     && rm -f "$W_TMP"/* \
-    && wget -P "$W_TMP" https://download.visualstudio.microsoft.com/download/pr/11687613/88b50ce70017bf10f2d56d60fcba6ab1/VC_redist.x86.exe \
-    && cabextract -q --directory="$W_TMP" "$W_TMP"/VC_redist.x86.exe \
+    && wget -P "$W_TMP" https://aka.ms/vs/16/release/vc_redist.x86.exe \
+    && cabextract -q --directory="$W_TMP" "$W_TMP"/vc_redist.x86.exe \
     && cabextract -q --directory="$W_TMP" "$W_TMP/a10" \
     && cabextract -q --directory="$W_TMP" "$W_TMP/a11" \
     && cd "$W_TMP" \
