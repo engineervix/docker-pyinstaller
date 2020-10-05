@@ -35,7 +35,9 @@ ENV WINEPREFIX /wine
 # xvfb settings
 ENV DISPLAY :0
 RUN set -x \
-    && echo 'Xvfb $DISPLAY -screen 0 1024x768x24 &' >> /root/.bashrc
+    && echo 'export DISPLAY=:0' >> /root/.bashrc \
+    && echo 'Xvfb $DISPLAY -screen 0 1024x768x24 &' >> /root/.bashrc \
+    && source /root/.bashrc
 # RUN set -x \
 #     && ( Xvfb :0 -screen 0 1024x768x16 & ) \
 #     && sleep 5
