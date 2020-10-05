@@ -10,7 +10,7 @@ ARG PYINSTALLER_VERSION=4.0
 RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy gpg-agent rename apt-transport-https software-properties-common wget \
+    && apt-get install --no-install-recommends -qfy gpg-agent rename apt-transport-https software-properties-common wget xvfb \
     && wget -nv https://dl.winehq.org/wine-builds/winehq.key \
     && apt-key add winehq.key \
     && add-apt-repository 'https://dl.winehq.org/wine-builds/ubuntu/' \
@@ -20,6 +20,13 @@ RUN set -x \
     && wget -nv https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
     && chmod +x winetricks \
     && mv winetricks /usr/local/bin
+
+ENV DISPLAY=:0.0
+
+ADD xvfb.sh /xvfb.sh
+RUN chmod a+x /xvfb.sh
+
+CMD /xvfb.sh
 
 # wine settings
 ENV WINEARCH win32
