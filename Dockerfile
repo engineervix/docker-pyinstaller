@@ -14,12 +14,17 @@ RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
     && apt-get install --no-install-recommends -qfy -o APT::Immediate-Configure=false libssl-dev:i386 ca-certificates gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
-    && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
-    && apt-key add winehq.key \
-    && apt update -qy \
-    && apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/' \
+    # && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
+    # && apt-key add winehq.key \
+    # && apt update -qy \
+    # && apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/' \
+    # && apt-get update -qy \
+    # && apt-get install --install-recommends -qfy $WINE_VERSION \
+    && wget -nv https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key -O Release.key \
+    && apt-key add - < Release.key \
+    && apt-add-repository 'deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./' \
     && apt-get update -qy \
-    && apt-get install --install-recommends -qfy $WINE_VERSION \
+    && apt install --install-recommends -qfy $WINE_VERSION \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && wget -nv https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
