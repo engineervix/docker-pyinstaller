@@ -1,4 +1,6 @@
 FROM ubuntu:20.04
+LABEL maintainer="victormiti@umusebo.com"
+LABEL description="A container to bundle python2 applications into Linux (x64) binaries using PyInstaller"
 SHELL ["/bin/bash", "-i", "-c"]
 
 ARG PYTHON_VERSION=2.7.18
