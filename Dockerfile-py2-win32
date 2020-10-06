@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 LABEL maintainer="victormiti@umusebo.com"
 LABEL description="A container to bundle python2 applications into Windows (x86) binaries using PyInstaller and Wine"
 
@@ -9,17 +9,22 @@ ARG PYTHON_VERSION=2.7.18
 # PyInstaller 3.6 is last version to support python2
 ARG PYINSTALLER_VERSION=3.6
 
-# we need wine for this to work, so we'll use the PPA
+# we need wine for this all to work, so we'll use the PPA
 RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
-    && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
-    && apt-key add winehq.key \
-    && apt update -qy \
-    && apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/' \
+    && apt-get install --no-install-recommends -qfy -o APT::Immediate-Configure=false libssl-dev:i386 ca-certificates gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
+    # && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
+    # && apt-key add winehq.key \
+    # && apt update -qy \
+    # && apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/' \
+    # && apt-get update -qy \
+    # && apt-get install --install-recommends -qfy $WINE_VERSION \
+    && wget -nv https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key -O Release.key \
+    && apt-key add - < Release.key \
+    && apt-add-repository 'deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./' \
     && apt-get update -qy \
-    && apt-get install --install-recommends -qfy $WINE_VERSION \
+    && apt install --install-recommends -qfy $WINE_VERSION \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && wget -nv https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
@@ -54,10 +59,10 @@ ENV PYPI_INDEX_URL=https://pypi.python.org/simple
 # install python inside wine
 RUN set -x \
     && wget -nv https://www.python.org/ftp/python/$PYTHON_VERSION/python-$PYTHON_VERSION.msi \
-    && wine msiexec /i python-$PYTHON_VERSION.msi /qn \
+    && wine msiexec /qn /i python-$PYTHON_VERSION.msi \
     && rm python-$PYTHON_VERSION.msi \
     && wget -nv https://download.microsoft.com/download/7/9/6/796EF2E4-801B-4FC4-AB28-B59FBF6D907B/VCForPython27.msi \
-    && wine msiexec /i VCForPython27.msi /qn \
+    && wine msiexec /qn /i VCForPython27.msi \
     && rm VCForPython27.msi \
     && sed -i 's/_windows_cert_stores = .*/_windows_cert_stores = ("ROOT",)/' "/wine/drive_c/Python27/Lib/ssl.py" \
     && echo 'wine '\''C:\Python27\python.exe'\'' "$@"' > /usr/bin/python \
