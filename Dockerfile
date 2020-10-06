@@ -1,8 +1,10 @@
 FROM ubuntu:20.04
+LABEL maintainer="victormiti@umusebo.com"
+LABEL description="A container to bundle python2 applications into Windows (x86) binaries using PyInstaller and Wine"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG WINE_VERSION=winehq-devel
+ARG WINE_VERSION=winehq-stable
 ARG PYTHON_VERSION=2.7.18
 # PyInstaller 3.6 is last version to support python2
 ARG PYINSTALLER_VERSION=3.6
@@ -11,19 +13,38 @@ ARG PYINSTALLER_VERSION=3.6
 RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy gpg-agent rename apt-transport-https software-properties-common wget \
+    && apt-get install --no-install-recommends -qfy gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
     && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
     && apt-key add winehq.key \
     && apt update -qy \
     && apt-add-repository 'https://dl.winehq.org/wine-builds/ubuntu/' \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy $WINE_VERSION winetricks \
-    && apt-get clean
+    && apt-get install --install-recommends -qfy $WINE_VERSION \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && wget -nv https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
+    && chmod +x winetricks \
+    && mv winetricks /usr/local/bin
+
+### The following didn't work as expected. Left them here for future reference
+
+# ARG DISPLAY=:99
+# ENV DISPLAY=${DISPLAY}
+# RUN echo "DISPLAY: ${DISPLAY}"
+
+# wine-gecko
+RUN mkdir -p /usr/share/wine/gecko
+RUN curl -o /usr/share/wine/gecko/wine_gecko-2.47-x86.msi http://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86.msi
 
 # wine settings
 ENV WINEARCH win32
 ENV WINEDEBUG fixme-all
 ENV WINEPREFIX /wine
+
+# windows 10 environment
+COPY config.sh .
+RUN chmod +x config.sh
+RUN ./config.sh
 
 # PYPI repository location
 ENV PYPI_URL=https://pypi.python.org/
@@ -32,7 +53,6 @@ ENV PYPI_INDEX_URL=https://pypi.python.org/simple
 
 # install python inside wine
 RUN set -x \
-    && winetricks win10 \
     && wget -nv https://www.python.org/ftp/python/$PYTHON_VERSION/python-$PYTHON_VERSION.msi \
     && wine msiexec /qn /i python-$PYTHON_VERSION.msi \
     && rm python-$PYTHON_VERSION.msi \
