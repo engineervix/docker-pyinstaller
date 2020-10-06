@@ -1,4 +1,6 @@
 FROM i386/ubuntu:18.04
+LABEL maintainer="victormiti@umusebo.com"
+LABEL description="A container to bundle python3 applications into Linux (x86) binaries using PyInstaller"
 SHELL ["/bin/bash", "-i", "-c"]
 
 ARG PYTHON_VERSION=3.7.9
