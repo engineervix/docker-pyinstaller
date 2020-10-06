@@ -31,12 +31,6 @@ RUN set -x \
     && chmod +x winetricks \
     && mv winetricks /usr/local/bin
 
-### The following didn't work as expected. Left them here for future reference
-
-# ARG DISPLAY=:99
-# ENV DISPLAY=${DISPLAY}
-# RUN echo "DISPLAY: ${DISPLAY}"
-
 # wine-gecko
 RUN mkdir -p /usr/share/wine/gecko
 RUN curl -o /usr/share/wine/gecko/wine_gecko-2.47-x86.msi http://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86.msi
@@ -46,10 +40,23 @@ ENV WINEARCH win32
 ENV WINEDEBUG fixme-all
 ENV WINEPREFIX /wine
 
+### The following didn't work as expected. Left them here for future reference
+
+# ARG DISPLAY=:99
+# ENV DISPLAY=${DISPLAY}
+# RUN echo "DISPLAY: ${DISPLAY}"
+
+# xvfb settings
+ENV DISPLAY :0
+RUN set -x \
+    && echo 'Xvfb $DISPLAY -screen 0 1024x768x24 &' >> /root/.bashrc
+# RUN set -x \
+#     && ( Xvfb :0 -screen 0 1024x768x16 & ) \
+#     && sleep 5
+
 # windows 10 environment
-COPY config.sh .
-RUN chmod +x config.sh
-RUN ./config.sh
+RUN set -x \
+    && winetricks -q win10
 
 # PYPI repository location
 ENV PYPI_URL=https://pypi.python.org/
