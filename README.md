@@ -2,21 +2,23 @@
 
 This is a fork of [cdrx/docker-pyinstaller](https://github.com/cdrx/docker-pyinstaller), with the following changes:
 
-- change Ubuntu images from 12.04/14.04/16.04 to 18.04/20.04
+- change Ubuntu base images from 12.04/14.04/16.04 to 18.04/20.04
 - change PyInstaller version from 3.6 to 4.0 for Python 3
-- change to "latest" Python 3.7 and 2.7 releases (as of October 4<sup>th</sup>, 2020)
+- change to _latest_ Python 3.7.X and 2.7.X releases (as of October 4<sup>th</sup>, 2020)
 - change OpenSSL from 1.0.2 to 1.1.1
 - change `winetricks win7` to `winetricks win10`
+- change `WINE_VERSION=winehq-staging` to `WINE_VERSION=winehq-stable`
+- other minor modifications
 
 ----
 
-**engineervix/pyinstaller-linux** and **engineervix/pyinstaller-windows** are a pair of Docker containers to ease compiling Python applications to binaries / exe files.
+[**engineervix/pyinstaller-linux**](https://hub.docker.com/r/engineervix/pyinstaller-linux) and [**engineervix/pyinstaller-windows**](https://hub.docker.com/r/engineervix/pyinstaller-windows) are a pair of Docker containers to ease compiling Python applications to binaries / exe files.
 
 Current PyInstaller version used: 4.0 (for Python 3) and 3.6 (for Python 2).
 
 ## Tags
 
-`engineervix/pyinstaller-linux` and `engineervix/pyinstaller-windows` both have two tags, `:python2` and `:python3` which you can use depending on the requirements of your project. `:latest` points to `:python3`
+[`engineervix/pyinstaller-linux`](https://hub.docker.com/r/engineervix/pyinstaller-linux) and [`engineervix/pyinstaller-windows`](https://hub.docker.com/r/engineervix/pyinstaller-windows) both have two tags, `:python2` and `:python3` which you can use depending on the requirements of your project. `:latest` points to `:python3`
 
 The `:python2` tags run Python 2.7.
 
