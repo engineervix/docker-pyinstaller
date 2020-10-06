@@ -14,7 +14,7 @@ This is a fork of [**cdrx/pyinstaller-windows**](https://hub.docker.com/r/cdrx/p
 
 [**engineervix/pyinstaller-windows**](https://hub.docker.com/r/engineervix/pyinstaller-windows) is a Docker container to ease compiling Python applications to Windows `.exe` files.
 
-Current PyInstaller version used: 4.0.
+Current PyInstaller version used: 3.6 (this is the last PyInstaller version to support Python 2.7).
 
 ## Tags
 
