@@ -1,30 +1,32 @@
-# PyInstaller Docker Images
+# pyinstaller-windows
 
 This is a fork of [cdrx/docker-pyinstaller](https://github.com/cdrx/docker-pyinstaller), with the following changes:
 
-- change Ubuntu images from 12.04/14.04/16.04 to 18.04/20.04
+- change Ubuntu base images from 12.04/14.04/16.04 to 18.04/20.04
 - change PyInstaller version from 3.6 to 4.0 for Python 3
-- change to "latest" Python 3.7 and 2.7 releases (as of October 4<sup>th</sup>, 2020)
+- change to _latest_ Python 3.7.X and 2.7.X releases (as of October 4<sup>th</sup>, 2020)
 - change OpenSSL from 1.0.2 to 1.1.1
 - change `winetricks win7` to `winetricks win10`
+- change `WINE_VERSION=winehq-staging` to `WINE_VERSION=winehq-stable`
+- other minor modifications
 
 ----
 
-**engineervix/pyinstaller-linux** and **engineervix/pyinstaller-windows** are a pair of Docker containers to ease compiling Python applications to binaries / exe files.
+[**engineervix/pyinstaller-windows**](https://hub.docker.com/r/engineervix/pyinstaller-windows) is a Docker container to ease compiling Python applications to Windows `.exe` files.
 
-Current PyInstaller version used: 4.0 (for Python 3) and 3.6 (for Python 2).
+Current PyInstaller version used: 4.0.
 
 ## Tags
 
-`engineervix/pyinstaller-linux` and `engineervix/pyinstaller-windows` both have two tags, `:python2` and `:python3` which you can use depending on the requirements of your project. `:latest` points to `:python3`
+[`engineervix/pyinstaller-windows`](https://hub.docker.com/r/engineervix/pyinstaller-windows) has three tags; `:python3`, `:python3-32bit` and `:python2` which you can use depending on the requirements of your project. `:latest` points to `:python3`
 
-The `:python2` tags run Python 2.7.
+The `:python2` tag runs Python 2.7.
 
-The `:python3` tag runs Python 3.7.
+The `:python3` and `:python3-32bit` tags run Python 3.7.
 
 ## Usage
 
-There are two containers, one for Linux and one for Windows builds. The Windows builder runs Wine inside Ubuntu to emulate Windows in Docker.
+This container runs Wine inside Ubuntu to "emulate" Windows in Docker.
 
 To build your application, you need to mount your source code into the `/src/` volume.
 
@@ -40,13 +42,7 @@ docker run -v "$(pwd):/src/" engineervix/pyinstaller-windows
 
 will build your PyInstaller project into `dist/windows/`. The `.exe` file will have the same name as your `.spec` file.
 
-```
-docker run -v "$(pwd):/src/" engineervix/pyinstaller-linux
-```
-
-will build your PyInstaller project into `dist/linux/`. The binary will have the same name as your `.spec` file.
-
-##### How do I install system libraries or dependencies that my Python packages need?
+### How do I install system libraries or dependencies that my Python packages need?
 
 You'll need to supply a custom command to Docker to install system pacakges. Something like:
 
@@ -56,23 +52,23 @@ docker run -v "$(pwd):/src/" --entrypoint /bin/sh engineervix/pyinstaller-linux 
 
 Replace `wget` with the dependencies / package(s) you need to install.
 
-##### How do I generate a .spec file?
+### How do I generate a .spec file?
 
-`docker run -v "$(pwd):/src/" engineervix/pyinstaller-linux "pyinstaller your-script.py"`
+`docker run -v "$(pwd):/src/" engineervix/pyinstaller-windows "pyinstaller your-script.py"`
 
 will generate a `spec` file for `your-script.py` in your current working directory. See the PyInstaller docs for more information.
 
-##### How do I change the PyInstaller version used?
+### How do I change the PyInstaller version used?
 
 Add `pyinstaller=X.Y.Z` to your `requirements.txt` (where `X.Y.Z` represents the version).
 
-##### Is it possible to use a package mirror?
+### Is it possible to use a package mirror?
 
 Yes, by supplying the `PYPI_URL` and `PYPI_INDEX_URL` environment variables that point to your PyPi mirror.
 
 ## Known Issues
 
-None
+You tell me!
 
 <!-- ## History
 
@@ -115,3 +111,5 @@ First release, works. -->
 ## License
 
 MIT
+
+---
