@@ -13,7 +13,7 @@ ARG PYINSTALLER_VERSION=3.6
 RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
+    && apt-get install --no-install-recommends -qfy -o APT::Immediate-Configure=false libssl-dev:i386 ca-certificates gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
     && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
     && apt-key add winehq.key \
     && apt update -qy \
