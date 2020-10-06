@@ -1,6 +1,6 @@
 # pyinstaller-windows
 
-This is a fork of [cdrx/docker-pyinstaller](https://github.com/cdrx/docker-pyinstaller), with the following changes:
+This is a fork of [**cdrx/pyinstaller-windows**](https://hub.docker.com/r/cdrx/pyinstaller-windows), with the following changes:
 
 - change Ubuntu base images from 12.04/14.04/16.04 to 18.04/20.04
 - change PyInstaller version from 3.6 to 4.0 for Python 3
