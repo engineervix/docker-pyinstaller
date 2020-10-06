@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 LABEL maintainer="victormiti@umusebo.com"
 LABEL description="A container to bundle python2 applications into Windows (x86) binaries using PyInstaller and Wine"
 
