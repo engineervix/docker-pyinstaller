@@ -8,7 +8,7 @@ ARG WINE_VERSION=winehq-stable
 ARG PYTHON_VERSION=3.7.9
 ARG PYINSTALLER_VERSION=4.0
 
-# we need wine for this all to work, so we'll use the PPA
+# we need wine for this to work, so we'll use the PPA
 RUN set -x \
     && dpkg --add-architecture i386 \
     && apt-get update -qy \
