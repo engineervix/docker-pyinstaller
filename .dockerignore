@@ -2,8 +2,6 @@
 .gitignore
 .gitattributes
 .pre-commit-config.yaml
-Dockerfile*
-docker-compose*
 README.md
 LICENSE
 .vscode
