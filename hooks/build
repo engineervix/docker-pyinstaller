@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Used by Docker Hub to replace the normal autobuild build script
+
+# Windows Python3 (32-bit) Build
+docker build --no-cache -t engineervix/pyinstaller-windows:python3-32bit . --network=host
