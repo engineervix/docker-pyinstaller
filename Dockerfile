@@ -10,7 +10,7 @@ ARG PYINSTALLER_VERSION=4.0
 
 # we need wine for this to work, so we'll use the PPA
 RUN set -x \
-    && dpkg --add-architecture i386 \
+    && dpkg --add-architecture i386 -f \
     && apt-get update -qy \
     && apt-get install --no-install-recommends -qfy gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
     && wget -nv https://dl.winehq.org/wine-builds/winehq.key \
@@ -22,48 +22,19 @@ RUN set -x \
     && rm -rf /var/lib/apt/lists/* \
     && wget -nv https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
     && chmod +x winetricks \
-    && mv winetricks /usr/local/bin
-
-# wine-gecko
-RUN mkdir -p /usr/share/wine/gecko
-RUN curl -o /usr/share/wine/gecko/wine_gecko-2.47-x86.msi http://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86.msi
-RUN curl -o /usr/share/wine/gecko/wine_gecko-2.47-x86_64.msi http://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86_64.msi
+    && mv winetricks /usr/local/bin \
+    # wine-gecko
+    && mkdir -p /usr/share/wine/gecko \ 
+    && curl -o /usr/share/wine/gecko/wine_gecko-2.47-x86.msi http://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86.msi \
+    && curl -o /usr/share/wine/gecko/wine_gecko-2.47-x86_64.msi http://dl.winehq.org/wine/wine-gecko/2.47/wine_gecko-2.47-x86_64.msi
 
 # wine settings
 ENV WINEARCH win64
 ENV WINEDEBUG fixme-all
 ENV WINEPREFIX /wine
 
-### The following didn't work as expected. Left them here for future reference
-
-# xvfb settings
-# ENV DISPLAY :0
-# RUN set -x \
-#     && echo 'export DISPLAY=:0' >> /root/.bashrc \
-#     && echo 'Xvfb $DISPLAY -screen 0 1024x768x24 &' >> /root/.bashrc
-# RUN set -x \
-#     && ( Xvfb :0 -screen 0 1024x768x16 & ) \
-#     && sleep 5
-
-# default for X Virtual Frame Buffer
-# ARG DISPLAY=:99
-# ENV DISPLAY=${DISPLAY}
-# RUN echo "DISPLAY: ${DISPLAY}"
-
-# RUN set -x \
-#     && ( Xvfb :99 & )
-
 # xvfb settings
 ENV DISPLAY :0
-RUN set -x \
-    && echo 'Xvfb $DISPLAY -screen 0 1024x768x24 &' >> /root/.bashrc
-# RUN set -x \
-#     && ( Xvfb :0 -screen 0 1024x768x16 & ) \
-#     && sleep 5
-
-# windows 10 environment
-RUN set -x \
-    && winetricks -q win10
 
 # PYPI repository location
 ENV PYPI_URL=https://pypi.python.org/
@@ -74,6 +45,9 @@ ENV PYPI_INDEX_URL=https://pypi.python.org/simple
 # the files directly, since installing isn't running correctly.
 
 RUN set -x \
+    && echo 'Xvfb $DISPLAY -screen 0 1024x768x24 &' >> /root/.bashrc \
+    # windows 10 environment
+    && winetricks -q win10 \
     && for msifile in `echo core dev exe lib path pip tcltk tools`; do \
         wget -nv "https://www.python.org/ftp/python/$PYTHON_VERSION/amd64/${msifile}.msi"; \
         wine msiexec /i "${msifile}.msi" /qb TARGETDIR=C:/Python37; \
