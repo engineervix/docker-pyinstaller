@@ -10,9 +10,9 @@ ARG PYINSTALLER_VERSION=4.0
 
 # we need wine for this to work, so we'll use the PPA
 RUN set -x \
-    && dpkg --add-architecture i386 -f \
+    && dpkg --add-architecture i386 \
     && apt-get update -qy \
-    && apt-get install --no-install-recommends -qfy gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
+    && apt-get install --no-install-recommends -qfy -o APT::Immediate-Configure=false gpg-agent rename apt-transport-https software-properties-common winbind cabextract wget curl zip unzip xvfb xdotool x11-utils xterm \
     && wget -nv https://dl.winehq.org/wine-builds/winehq.key \
     && apt-key add winehq.key \
     && add-apt-repository 'https://dl.winehq.org/wine-builds/ubuntu/' \
